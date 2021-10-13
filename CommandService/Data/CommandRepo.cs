@@ -15,17 +15,30 @@ namespace CommandService.Data
 
         public void CreateCommand(int platformId, Command command)
         {
-            throw new System.NotImplementedException();
+            if (command == null)
+            {
+                throw new System.ArgumentNullException(nameof(command));
+            }
+
+            command.PlatformId = platformId;
+            _context.Commands.Add(command);
         }
 
         public void CreatePlatform(Platform platform)
         {
-            throw new System.NotImplementedException();
+            if (platform == null)
+            {
+                 throw new System.ArgumentNullException(nameof(platform));
+            }
+            else
+            {
+                _context.Platforms.Add(platform);
+            }
         }
 
         public IEnumerable<Platform> GetAllPlatforms()
         {
-            throw new System.NotImplementedException();
+            return _context.Platforms.ToList();
         }
 
         public Command GetCommand(int platformId, int commandId)
