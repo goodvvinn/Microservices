@@ -2,21 +2,35 @@ namespace PlatformService.Data
 {
     using System.Linq;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using PlatformService.Model;
 
     public static class PrepDb
     {
-        public static void PrepPopulation(IApplicationBuilder app)
+        public static void PrepPopulation(IApplicationBuilder app, bool isProd)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>());
+                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>(), isProd);
             }
         }
 
-        private static void SeedData(AppDbContext context) 
+        private static void SeedData(AppDbContext context, bool isProd) 
         {
+            if (isProd)
+            {
+                System.Console.WriteLine("------> Attempting to apply migration");
+                try
+                {
+                     context.Database.Migrate();
+                }
+                catch (System.Exception ex)
+                {
+                    System.Console.WriteLine($"-----> Could not run migration: {ex}");
+                }
+            }
+
             if (!context.Platforms.Any())
             {
                 System.Console.WriteLine("Seeding data....");
