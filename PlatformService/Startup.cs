@@ -9,6 +9,7 @@ namespace PlatformService
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
+    using PlatformService.AsyncDataServices;
     using PlatformService.Data;
     using PlatformService.SyncDataServices.Http;
 
@@ -41,6 +42,7 @@ namespace PlatformService
             
             services.TryAddScoped<IPlatformRepo, PlatformRepo>();
             services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+            services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
