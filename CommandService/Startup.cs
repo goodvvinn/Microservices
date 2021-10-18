@@ -1,6 +1,7 @@
 namespace CommandService
 {
     using System;
+    using CommandService.AsyncDataServices;
     using CommandService.Data;
     using CommandService.EventProcessing;
     using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,7 @@ namespace CommandService
             .UseInMemoryDatabase("InMemory"));
             services.AddScoped<ICommandRepo, CommandRepo>();
             services.AddControllers();
+            services.AddHostedService<MessageBusSubscriber>();
             services.AddSingleton<IEventProcessor, EventProcessor>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
